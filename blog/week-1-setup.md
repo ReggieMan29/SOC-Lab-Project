@@ -27,8 +27,8 @@ Ubuntu Server was installed with a minimal configuration and OpenSSH enabled for
 
 Post-installation updates:
 
-sudo apt update && sudo apt upgrade -y
-sudo apt install curl wget unzip -y
+`sudo apt update && sudo apt upgrade -y`
+`sudo apt install curl wget unzip -y`
 
 This ensured all system packages were updated before deploying Splunk.
 
@@ -74,7 +74,7 @@ During startup, an administrative account was created.
 
 After installation, Splunk reported:
 
-Web interface available at http://'hostname':8000 
+`Web interface available at http://'hostname':8000`
 
 However, the interface did not initially load in the browser.
 
@@ -84,17 +84,17 @@ However, the interface did not initially load in the browser.
 
 Verified Splunk service status:
 
-sudo /opt/splunk/bin/splunk status
+`sudo /opt/splunk/bin/splunk status`
 
 Verified port 8000 was listening:
 
-sudo ss -tulnp | grep 8000
+`sudo ss -tulnp | grep 8000`
 
 Confirmed the VM IP address:
 
 The issue was due to using the incorrect IP address in the browser. Once the correct NAT-assigned IP was used:
 
-http://<ubuntu_ip>:8000
+`http://<ubuntu_ip>:8000`
 
 The Splunk web interface loaded successfully.
 
