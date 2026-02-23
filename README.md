@@ -114,4 +114,8 @@ This project is designed to simulate entry-level SOC analyst responsibilities wh
 
 ---
 
+## 📖 Blog Progress
+
+- [Week 1 - Lab Setup](blog/week-1-setup.md)
+
 *Project in Progress – Updates will be committed throughout the 60-day timeline.*
