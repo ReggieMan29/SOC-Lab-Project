@@ -50,13 +50,13 @@ All alerts will follow this standardized workflow:
 
 ## 📂 Repository Structure
 
-.
-├── docs/ # Project scope, methodology, final summary
-├── playbooks/ # SOC investigation playbooks
-├── incidents/ # Formal incident reports
-├── detections/ # Detection logic and alert criteria
-├── scripts/ # Log parsing / automation scripts
-├── screenshots/ # SIEM dashboards and investigation evidence
+.   
+├── docs/ # Project scope, methodology, final summary   
+├── playbooks/ # SOC investigation playbooks   
+├── incidents/ # Formal incident reports   
+├── detections/ # Detection logic and alert criteria   
+├── scripts/ # Log parsing / automation scripts   
+├── screenshots/ # SIEM dashboards and investigation evidence   
 └── README.md
 
 ---
