@@ -49,6 +49,7 @@ All alerts will follow this standardized workflow:
 ---
 
 ## 📂 Repository Structure
+
 .
 ├── docs/ # Project scope, methodology, final summary
 ├── playbooks/ # SOC investigation playbooks
