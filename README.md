@@ -51,6 +51,7 @@ All alerts will follow this standardized workflow:
 ## 📂 Repository Structure
 
 .   
+├── blog/ # Weekly updates   
 ├── docs/ # Project scope, methodology, final summary   
 ├── playbooks/ # SOC investigation playbooks   
 ├── incidents/ # Formal incident reports   
