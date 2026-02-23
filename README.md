@@ -49,3 +49,67 @@ All alerts will follow this standardized workflow:
 ---
 
 ## 📂 Repository Structure
+.
+├── docs/ # Project scope, methodology, final summary
+├── playbooks/ # SOC investigation playbooks
+├── incidents/ # Formal incident reports
+├── detections/ # Detection logic and alert criteria
+├── scripts/ # Log parsing / automation scripts
+├── screenshots/ # SIEM dashboards and investigation evidence
+└── README.md
+
+---
+
+## 🛠️ Tools (Planned)
+
+- SIEM platform (Splunk / Microsoft Sentinel)
+- Windows & Linux virtual machines
+- MITRE ATT&CK Framework
+- Python / Bash for log analysis
+- GitHub for documentation and version control
+
+---
+
+## 📊 Deliverables
+
+- Alert triage documentation  
+- Investigation timelines  
+- Indicators of Compromise (IOCs)  
+- SOC Playbooks:
+  - Phishing Investigation
+  - Suspicious Login / Brute Force
+  - Malware / Endpoint Alert
+- Detection improvement recommendations  
+- Executive-style SOC summary report  
+
+---
+
+## 📅 Project Phases
+
+| Phase | Focus |
+|-------|-------|
+| Phase 1 | Planning & Lab Setup |
+| Phase 2 | Alert Simulation |
+| Phase 3 | Investigation & Reporting |
+| Phase 4 | Detection Tuning & Optimization |
+| Phase 5 | Final Summary & Lessons Learned |
+
+---
+
+## 📈 Success Criteria
+
+- 10+ alerts investigated
+- Clear false positive analysis included
+- MITRE ATT&CK mapping for confirmed threats
+- Consistent escalation documentation
+- Repeatable investigation workflow established
+
+---
+
+## 🎓 Purpose
+
+This project is designed to simulate entry-level SOC analyst responsibilities while developing technical analysis, documentation discipline, and security process improvement skills.
+
+---
+
+*Project in Progress – Updates will be committed throughout the 60-day timeline.*
