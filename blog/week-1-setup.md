@@ -108,7 +108,7 @@ At the completion of this phase:
 - Splunk Enterprise installed  
 - Web interface accessible  
 - Networking configuration validated  
-- Core SIEM infrastructure operational  
+- Core SIEM infrastructure operational
 
 This completes Phase 1 of the SOC Lab deployment.
 
@@ -130,6 +130,171 @@ The next stage of the lab will include:
 - Deploying a Windows 10 endpoint VM  
 - Installing the Splunk Universal Forwarder  
 - Ingesting Windows Event Logs  
-- Beginning detection engineering and log analysis  
+- Beginning detection engineering and log analysis
+- Remove NAT dependency 
 
 This will establish the first functional SOC ingestion pipeline.
+
+# Day 2 - Network Segmentation, Static IP Configuration & Windows VM Deployment
+
+
+## Overview
+
+Day 2 focused on completing the endpoint deployment and stabilizing the SOC lab network. This included creating the Windows 11 virtual machine, configuring Splunk Universal Forwarder, resolving VMware subnet conflicts, and implementing static IP addressing for long-term lab stability.
+
+### Objectives
+
+- Deploy Windows 11 endpoint VM
+- Install Splunk Universal Forwarder
+- Ensure proper network segmentation
+- Remove NAT dependency
+- Implement static IP addressing
+- Validate full SIEM connectivity
+
+
+---
+
+# Windows 11 VM Deployment
+
+## VM Creation
+
+A new Windows 11 virtual machine was created in VMware with the following configuration:
+
+- 2–4 CPU cores
+- 8 GB RAM
+- 60+ GB disk
+- Network Adapter attached to Host-Only (VMnet1)
+
+The Windows ISO was mounted and installation completed through the standard Windows setup process.
+
+## Initial Network Configuration
+
+Although both virtual machines were configured under "Host-Only," the Windows machine was receiving an IP in the `192.168.162.x` range, while the Ubuntu Splunk server was operating in the `192.168.56.x` range.
+
+Because these were different VMware virtual subnets, the systems could not communicate.
+
+### Symptoms
+
+- Failed ping attempts between VMs
+- Splunk Web not loading from Windows
+- Forwarder unable to reliably communicate
+
+---
+
+## Root Cause
+
+VMware had multiple virtual networks configured:
+
+- VMnet1 → 192.168.56.0 (Host-Only)
+- VMnet8 → 192.168.162.0 (NAT)
+
+The Windows VM was attached to a different VMnet than the Ubuntu VM.
+
+Even when selecting "Host-Only," VMware can map VMs to different internal networks unless explicitly configured.
+
+---
+
+## Resolution
+
+Both VMs were explicitly attached to the same virtual network (VMnet1).
+
+To eliminate future DHCP inconsistencies, static IP addressing was configured.
+
+### Ubuntu (Splunk Server)
+
+IP Address: `192.168.56.x`  
+Subnet Mask: `255.255.255.0`
+
+### Windows Endpoint
+
+IP Address: `192.168.56.x`  
+Subnet Mask: `255.255.255.0`
+
+No default gateway was required because the lab is fully isolated.
+
+---
+
+## Connectivity Validation
+
+From the Windows machine:
+
+`ping 192.168.56.x`
+
+`Test-NetConnection -ComputerName 192.168.56.10 -Port 9997`
+
+Both returned successful results.
+
+Splunk Web was accessible at:
+
+`http://192.168.56.x:8000`
+
+Log ingestion resumed immediately after network stabilization.
+
+---
+
+## Current Architecture
+
+Windows 11 Endpoint (192.168.56.x)  
+|  
+Host-Only Network  
+192.168.56.0/24  
+|  
+Ubuntu Splunk Enterprise (192.168.56.x)     
+|   
+NAT Network
+192.168.162.0/24
+
+The environment is now fully internal and segmented.
+
+---
+
+## Why Static IPs Were Chosen
+
+Using static IP addresses provides:
+
+- Predictable forwarder configuration
+- No DHCP lease dependency
+- Reduced troubleshooting complexity
+- Enterprise-style infrastructure stability
+
+This mirrors how production SIEM and security infrastructure is typically deployed.
+
+---
+
+## Lessons Learned
+
+- "Host-Only" does not guarantee identical VMnet usage
+- VMware virtual networking must be explicitly verified
+- DHCP can introduce instability in lab environments
+- Static addressing is preferred for core security infrastructure
+- Validating connectivity step-by-step prevents cascading troubleshooting
+
+---
+
+## Lab Status After Day 2
+
+- Splunk Enterprise operational
+- Windows Forwarder communicating
+- Logs successfully ingesting
+- Network fully isolated
+- Infrastructure stabilized
+
+The SOC lab foundation is now properly engineered and ready for detection engineering and incident simulation.
+
+---
+
+## Next Phase
+
+Upcoming objectives:
+
+- Create first detection rule (Failed Logon Monitoring)
+- Build alerting workflow
+- Begin structured incident documentation
+- Map detections to MITRE ATT&CK
+
+Day 2 completed the infrastructure hardening phase.  
+The lab is now stable, segmented, and production-structured.
+
+
+
+
