@@ -295,6 +295,130 @@ Upcoming objectives:
 Day 2 completed the infrastructure hardening phase.  
 The lab is now stable, segmented, and production-structured.
 
+# Day 3 - Advanced Audit Policy & First Detection Rule
 
+## Overview
+
+Day 3 marked the transition from infrastructure deployment to detection engineering. With the Splunk server and Windows endpoint stabilized, the focus shifted to enabling advanced audit logging, validating security telemetry, and creating the first SOC detection rule.
+
+The objective was to ensure full visibility into Windows authentication activity and build a foundational brute-force detection in Splunk.
+
+---
+
+## Identity & Access Structure Implementation
+
+To simulate a realistic enterprise-style environment, additional users and role-based groups were created on the Windows 11 endpoint.
+
+### Users Created
+
+- Kelly (HR)
+- Jimmy (Finance)
+- Hellen (IT_Helpdesk)
+- Ethan (Workstations_LocalAdmins)
+
+### Groups Created
+
+- HR
+- Finance
+- IT_Helpdesk
+- Workstations_LocalAdmins
+
+To simulate role-based access control (RBAC), the Workstations_LocalAdmins group was nested inside the built-in Administrators group using PowerShell:
+
+Add-LocalGroupMember -Group "Administrators" -Member "Workstations_LocalAdmins"
+
+This created the following privilege hierarchy:
+
+Ethan → Workstations_LocalAdmins → Administrators
+
+The IT_Helpdesk group was granted limited elevated permissions by adding it to:
+
+- Remote Desktop Users
+- Event Log Readers
+
+This allowed elevated access without full administrative privileges and created realistic opportunities for privilege monitoring and detection.
+
+---
+
+## Advanced Audit Policy Configuration
+
+To ensure proper security logging, advanced audit subcategories were enabled using:
+
+auditpol /set /subcategory:"Logon" /success:enable /failure:enable
+auditpol /set /subcategory:"Account Lockout" /success:enable /failure:enable
+auditpol /set /subcategory:"User Account Management" /success:enable /failure:enable
+auditpol /set /subcategory:"Security Group Management" /success:enable /failure:enable
+auditpol /set /subcategory:"Special Logon" /success:enable /failure:enable
+auditpol /set /subcategory:"Other Logon/Logoff Events" /success:enable /failure:enable
+
+The Security event log size was increased to 100MB to prevent log rollover during testing.
+
+---
+
+## Log Validation in Splunk
+
+Security log ingestion was verified using:
+
+index=* sourcetype="WinEventLog:Security"
+
+Failed logon activity was confirmed using:
+
+index=* sourcetype="WinEventLog:Security" EventCode=4625
+
+During validation, it was discovered that the username field in this environment is Account_Name rather than TargetUserName. Detection queries were adjusted accordingly.
+
+This reinforced the importance of validating field names before building detection logic.
+
+---
+
+## Detection Rule - Failed Logon Monitoring
+
+### Detection Objective
+
+Detect 5 or more failed logon attempts against the same account within a 5-minute window.
+
+### SPL Query
+
+index=* sourcetype="WinEventLog:Security" EventCode=4625
+| search NOT Account_Name IN ("SYSTEM","ANONYMOUS LOGON")
+| bin _time span=5m
+| stats count by _time, Account_Name
+| where count >= 5
+
+This detection identifies potential brute-force or password-spraying behavior.
+
+### MITRE ATT&CK Mapping
+
+- Tactic: Credential Access (TA0006)
+- Technique: Brute Force (T1110)
+
+### Alert Configuration
+
+- Trigger Condition: Number of results > 0
+- Time Range: Last 5 minutes
+- Schedule: Every 5 minutes
+- Severity: High
+
+---
+
+## Lessons Learned
+
+- Field validation is critical before writing detection queries.
+- Advanced audit subcategories must be explicitly enabled for full visibility.
+- Group nesting enables realistic privilege escalation simulation.
+- Detection rules should be time-bound to reduce false positives.
+- Telemetry validation must occur before alert creation.
+
+---
+
+## Lab Status After Day 3
+
+- Tiered identity structure implemented
+- Advanced audit policies enabled
+- Security logs validated in Splunk
+- First detection rule created and tested
+- Alerting workflow established
+
+Day 3 marks the beginning of structured detection engineering within the SOC lab. The environment is now capable of detecting credential-based attack behavior and generating SOC-style alerts.
 
 
