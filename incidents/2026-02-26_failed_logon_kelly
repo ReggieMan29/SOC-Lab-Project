@@ -1,0 +1,40 @@
+# Incident Report: Failed Logon Brute Force Alert
+
+## Alert Information
+
+- Detection: Failed Logon Brute Force
+- Severity: High
+- Date Triggered: 2026-02-26
+- Affected Account: Kelly
+
+## Summary
+
+The Failed Logon Brute Force detection triggered after multiple failed authentication attempts were recorded for the user account "Kelly" within a 5-minute period.
+
+## Event Details
+
+- Event ID: 4625
+- Source: Windows Security Log
+- Number of Failed Attempts: 6
+- Time Window: 5 Minutes
+
+## Investigation Steps
+
+1. Verified failed logon attempts in Splunk.
+2. Confirmed repeated authentication failures.
+3. Validated source of attempts originated from local test activity.
+4. Confirmed no successful compromise occurred.
+
+## Determination
+
+False Positive - Lab Simulation Activity
+
+## Containment Actions
+
+None required.
+
+## Lessons Learned
+
+- Detection logic is functioning as expected.
+- Alert triggers appropriately at defined threshold.
+- Field validation was critical for accurate detection.
