@@ -5,11 +5,11 @@
 - Detection: Failed Logon Brute Force
 - Severity: High
 - Date Triggered: 2026-02-26
-- Affected Account: Kelly
+- Affected Account: Hellen
 
 ## Summary
 
-The Failed Logon Brute Force detection triggered after multiple failed authentication attempts were recorded for the user account "Kelly" within a 5-minute period.
+The Failed Logon Brute Force detection triggered after multiple failed authentication attempts were recorded for the user account "Hellen" within a 5-minute period.
 
 ## Event Details
 
