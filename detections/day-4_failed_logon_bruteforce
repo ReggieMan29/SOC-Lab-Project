@@ -1,0 +1,52 @@
+# Detection: Failed Logon Brute Force
+
+## Detection Name
+
+Failed Logon Brute Force - Windows Security Event 4625
+
+## Description
+
+This detection identifies potential brute force or password spraying activity by monitoring multiple failed logon attempts against the same user account within a short time window.
+
+## Data Source
+
+- Windows Security Event Log
+- Event ID: 4625
+- Sourcetype: WinEventLog:Security
+
+## Detection Logic
+
+Detect 5 or more failed logon attempts against the same account within a 5-minute period.
+
+## SPL Query
+
+index=* sourcetype="WinEventLog:Security" EventCode=4625
+| search NOT Account_Name IN ("SYSTEM","ANONYMOUS LOGON")
+| bin _time span=5m
+| stats count by _time, Account_Name
+| where count >= 5
+
+## MITRE ATT&CK Mapping
+
+- Tactic: Credential Access (TA0006)
+- Technique: Brute Force (T1110)
+
+## Severity
+
+High
+
+## False Positives
+
+- User repeatedly entering incorrect password
+- Account lockout threshold testing
+- Automated service misconfiguration
+
+## Tuning Considerations
+
+- Adjust threshold based on environment size
+- Consider adding Source_Network_Address for better visibility
+- Implement account lockout monitoring correlation
+
+## Status
+
+Active
