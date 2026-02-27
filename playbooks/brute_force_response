@@ -1,0 +1,39 @@
+# Playbook: Brute Force Authentication Attempt
+
+## Objective
+
+Provide structured response steps when multiple failed logon attempts are detected against a user account.
+
+## Detection Source
+
+- Windows Security Event ID 4625
+- Failed Logon Monitoring Alert
+
+## Investigation Steps
+
+1. Identify affected user account.
+2. Determine number of failed attempts and time window.
+3. Identify source IP address if available.
+4. Check for successful logon events (4624) following failures.
+5. Review recent account changes or group membership modifications.
+6. Determine if account lockout occurred.
+
+## Containment Steps
+
+- Temporarily disable affected account if compromise suspected.
+- Reset user password.
+- Force password change at next logon.
+- Investigate potential lateral movement.
+
+## Escalation Criteria
+
+- Successful logon following multiple failures
+- Privileged account targeted
+- Multiple accounts targeted from same source
+
+## Documentation Requirements
+
+- Record timeline of events
+- Capture relevant SPL queries
+- Attach screenshots of findings
+- Classify as True Positive or False Positive
