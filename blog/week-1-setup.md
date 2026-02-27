@@ -421,4 +421,106 @@ This detection identifies potential brute-force or password-spraying behavior.
 
 Day 3 marks the beginning of structured detection engineering within the SOC lab. The environment is now capable of detecting credential-based attack behavior and generating SOC-style alerts.
 
+# Day 4 - Detection Formalization & Incident Documentation
 
+## Overview
+
+Day 4 focused on transforming detection logic into structured SOC artifacts. While Day 3 introduced the first detection rule, Day 4 formalized that detection into documented engineering output and introduced incident reporting and response playbooks.
+
+The objective was to move from simple alert creation to full SOC workflow simulation.
+
+---
+
+## Detection Formalization
+
+The previously created Failed Logon Brute Force detection was moved into the `detections/` directory and documented as a formal detection artifact.
+
+The detection monitors Windows Security Event ID 4625 and triggers when five or more failed logon attempts occur against the same account within a five-minute window.
+
+### Detection Logic
+
+index=* sourcetype="WinEventLog:Security" EventCode=4625
+| search NOT Account_Name IN ("SYSTEM","ANONYMOUS LOGON")
+| bin _time span=5m
+| stats count by _time, Account_Name
+| where count >= 5
+
+### MITRE ATT&CK Mapping
+
+- Tactic: Credential Access (TA0006)
+- Technique: Brute Force (T1110)
+
+Formalizing detections improves consistency, tuning, and future scalability.
+
+---
+
+## Incident Simulation
+
+To validate the detection workflow, multiple failed logon attempts were generated against the Kelly account. The alert triggered as expected.
+
+An incident report was created in the `incidents/` directory documenting:
+
+- Alert details
+- Timeline of events
+- Investigation steps
+- Determination
+- Containment actions
+
+This simulates real SOC analyst documentation practices.
+
+### Incident Determination
+
+The alert was classified as a False Positive due to intentional lab simulation activity.
+
+However, the detection logic functioned correctly and triggered at the defined threshold.
+
+---
+
+## Playbook Creation
+
+A structured response playbook was created in the `playbooks/` directory to outline investigative and containment procedures for brute-force authentication attempts.
+
+The playbook includes:
+
+- Investigation workflow
+- Log validation steps
+- Containment recommendations
+- Escalation criteria
+- Documentation requirements
+
+This introduces repeatable and standardized incident response procedures into the lab environment.
+
+---
+
+## Repository Structure Implementation
+
+The following directories are now active components of the SOC lab:
+
+- detections/
+- incidents/
+- playbooks/
+- screenshots/
+
+This structure mirrors enterprise SOC documentation practices and supports detection lifecycle management.
+
+---
+
+## Lessons Learned
+
+- Detections should be documented formally, not just written as queries.
+- Incident documentation is essential for tracking alert effectiveness.
+- Playbooks ensure consistent investigative methodology.
+- Structured repositories increase portfolio professionalism.
+- Detection engineering includes validation, documentation, and tuning.
+
+---
+
+## Lab Status After Day 4
+
+- Detection formalized in repository
+- Incident report created
+- Response playbook documented
+- Screenshot evidence captured
+- SOC workflow simulation established
+
+Day 4 marks the transition from simple SIEM usage to structured SOC operations simulation. The lab now includes detection engineering, alert validation, incident documentation, and response playbooks.
