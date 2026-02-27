@@ -15,7 +15,7 @@ The Failed Logon Brute Force detection triggered after multiple failed authentic
 
 - Event ID: 4625
 - Source: Windows Security Log
-- Number of Failed Attempts: 6
+- Number of Failed Attempts: 8
 - Time Window: 5 Minutes
 
 ## Investigation Steps
