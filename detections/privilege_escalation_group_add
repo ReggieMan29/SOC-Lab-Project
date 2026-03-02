@@ -1,0 +1,50 @@
+# Detection: Privilege Escalation via Group Membership Change
+
+## Detection Name
+
+Local Group Membership Added - Event ID 4732
+
+## Description
+
+This detection monitors for users being added to privileged local groups, such as Administrators or Workstations_LocalAdmins. Unauthorized group membership changes may indicate privilege escalation activity.
+
+## Data Source
+
+- Windows Security Event Log
+- Event ID: 4732
+- Sourcetype: WinEventLog:Security
+
+## Detection Logic
+
+Detect additions to privileged local groups.
+
+## SPL Query
+
+index=* sourcetype="WinEventLog:Security" EventCode=4732
+| search TargetUserName="Administrators" OR TargetUserName="Workstations_LocalAdmins"
+| table _time, Account_Name, Member_Name, TargetUserName
+
+## MITRE ATT&CK Mapping
+
+- Tactic: Privilege Escalation (TA0004)
+- Technique: Abuse Elevation Control Mechanism (T1548)
+
+## Severity
+
+Critical
+
+## False Positives
+
+- Authorized administrative changes
+- IT maintenance activities
+- Role updates during onboarding
+
+## Tuning Considerations
+
+- Whitelist known administrative accounts
+- Alert only on non-IT_Helpdesk accounts
+- Correlate with logon events (4624)
+
+## Status
+
+Active
