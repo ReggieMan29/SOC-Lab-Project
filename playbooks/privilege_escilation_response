@@ -1,0 +1,37 @@
+# Playbook: Privilege Escalation via Group Modification
+
+## Objective
+
+Provide structured investigation steps when a privileged group membership change is detected.
+
+## Detection Source
+
+- Windows Security Event ID 4732
+
+## Investigation Steps
+
+1. Identify modified group.
+2. Identify added member.
+3. Determine initiating account.
+4. Validate legitimacy of change.
+5. Check for recent failed logons or suspicious activity.
+6. Confirm whether privilege was used after elevation.
+
+## Containment Steps
+
+- Remove unauthorized group membership.
+- Reset affected account password.
+- Review related authentication events.
+- Disable account if compromise suspected.
+
+## Escalation Criteria
+
+- Non-administrative user added to Administrators group.
+- Privileged account elevation outside business hours.
+- Multiple elevation events within short timeframe.
+
+## Documentation Requirements
+
+- Record timeline of events.
+- Capture relevant SPL output.
+- Classify as True Positive or False Positive.
