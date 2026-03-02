@@ -524,3 +524,109 @@ This structure mirrors enterprise SOC documentation practices and supports detec
 - SOC workflow simulation established
 
 Day 4 marks the transition from simple SIEM usage to structured SOC operations simulation. The lab now includes detection engineering, alert validation, incident documentation, and response playbooks.
+
+# Day 5 - Privilege Escalation Detection & Group Monitoring
+
+## Overview
+
+Day 5 focused on detecting privilege escalation through local group membership changes. While previous days concentrated on authentication monitoring, this phase introduced monitoring of high-risk authorization events.
+
+The objective was to detect when users are added to privileged groups such as Administrators or Workstations_LocalAdmins and simulate a privilege escalation scenario.
+
+---
+
+## Detection Engineering - Group Membership Monitoring
+
+A new detection was created to monitor Windows Security Event ID 4732, which indicates a member was added to a local security-enabled group.
+
+Privileged groups monitored:
+
+- Administrators
+- Workstations_LocalAdmins
+
+### SPL Query
+
+index=* sourcetype="WinEventLog:Security" EventCode=4732
+| search TargetUserName="Administrators" OR TargetUserName="Workstations_LocalAdmins"
+| table _time, Account_Name, Member_Name, TargetUserName
+
+This query identifies:
+
+- When a user is added
+- Which group was modified
+- Which account performed the action
+
+---
+
+## Privilege Escalation Simulation
+
+To validate detection functionality:
+
+1. Jimmy was added to the Workstations_LocalAdmins group.
+2. Jimmy was removed.
+3. Jimmy was re-added.
+
+This generated Event ID 4732 in the Windows Security log.
+
+The detection triggered as expected, confirming that group membership monitoring is functioning correctly.
+
+---
+
+## MITRE ATT&CK Mapping
+
+- Tactic: Privilege Escalation (TA0004)
+- Technique: Abuse Elevation Control Mechanism (T1548)
+
+Monitoring group membership changes is critical because attackers frequently elevate privileges after initial access.
+
+---
+
+## Incident Documentation
+
+An incident report was created in the incidents directory documenting:
+
+- Alert details
+- Modified group
+- Initiating account
+- Investigation steps
+- Determination
+
+The event was classified as a False Positive due to controlled lab simulation activity.
+
+---
+
+## Playbook Implementation
+
+A structured response playbook was created to standardize investigation steps for privilege escalation alerts.
+
+The playbook includes:
+
+- Identification of modified group
+- Validation of initiating account
+- Correlation with authentication events
+- Containment procedures
+- Escalation criteria
+
+This ensures repeatable and structured response methodology for high-severity alerts.
+
+---
+
+## Lessons Learned
+
+- Privileged group changes represent high-value security telemetry.
+- Monitoring authorization events is as important as monitoring authentication failures.
+- Detection engineering must include validation and documentation.
+- Correlating group changes with logon events strengthens investigative capability.
+- Structured playbooks improve consistency in incident handling.
+
+---
+
+## Lab Status After Day 5
+
+- Privilege escalation detection implemented
+- Event ID 4732 validated in Splunk
+- Incident documentation completed
+- Response playbook created
+- High-severity monitoring expanded
+
+Day 5 introduces authorization monitoring into the SOC lab. The environment now detects both authentication-based attacks and privilege escalation activity, significantly increasing detection coverage.
