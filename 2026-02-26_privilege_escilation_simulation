@@ -1,0 +1,40 @@
+# Incident Report: Privilege Escalation Alert
+
+## Alert Information
+
+- Detection: Local Group Membership Added
+- Severity: Critical
+- Date Triggered: 2026-02-26
+- Affected Account: Jimmy
+
+## Summary
+
+A group membership modification event was detected indicating that the account "Jimmy" was added to a privileged local group.
+
+## Event Details
+
+- Event ID: 4732
+- Group Modified: Workstations_LocalAdmins
+- Action: Member Added
+- Initiating Account: Ethan
+
+## Investigation Steps
+
+1. Verified Event ID 4732 in Splunk.
+2. Confirmed group modification activity.
+3. Identified initiating account.
+4. Reviewed prior authentication activity.
+
+## Determination
+
+False Positive - Lab Simulation Activity
+
+## Containment Actions
+
+None required.
+
+## Lessons Learned
+
+- Privileged group monitoring is critical for early detection of escalation.
+- Group membership events provide high-value telemetry.
+- Correlation with authentication logs improves detection quality.
