@@ -630,3 +630,23 @@ This ensures repeatable and structured response methodology for high-severity al
 - High-severity monitoring expanded
 
 Day 5 introduces authorization monitoring into the SOC lab. The environment now detects both authentication-based attacks and privilege escalation activity, significantly increasing detection coverage.
+
+# Day 6 – Kali Setup and RDP Validation
+
+## Objective
+Set up Kali Linux as the attacker system and validate remote access to the Windows target over RDP.
+
+## Actions Completed
+- Confirmed Windows Remote Desktop service was enabled
+- Verified RDP port availability on the Windows machine
+- Installed and configured an RDP client on Ubuntu
+- Troubleshot authentication and connection issues
+- Successfully established an RDP session into the Windows machine
+
+## Validation
+- Ubuntu machine successfully connected to Windows over RDP
+- Windows target accepted remote login over port 3389
+- Lab systems confirmed capable of generating authentication and remote access events
+
+## Outcome
+The lab environment now supports realistic remote access activity that can be monitored and analyzed in Splunk.
